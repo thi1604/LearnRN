@@ -1,10 +1,17 @@
 import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { CreateTask } from "../CreateTask/CreateTask";
 
 
+type RootStackParams = {
+  Home: undefined;
+  CreateTask: undefined;
+  EditTask: undefined
+};
+
 export const ButtonCreate = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   return (
       <TouchableOpacity  style={[styles.buttonStyle, styles.textAlign]} onPress={() => navigation.navigate("CreateTask")}>
         <View>

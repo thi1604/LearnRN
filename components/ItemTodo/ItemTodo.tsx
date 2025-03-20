@@ -2,12 +2,20 @@ import { Button, StyleSheet, Text, View } from "react-native"
 import { ButtonIcon } from "../Buttons/ButtonIcon";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+export type RootStackParams = {
+  Home: undefined;
+  CreateTask: undefined;
+  EditTask: {title: string, subTitle: string}
+};
+
 
 export const ItemTodo = (props: any) => {
   const { data } = props;
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const handleEdit = () => {
-    navigation.navigate("EditTask");
+    navigation.navigate("EditTask", data);
   }
   const handleDelete = () => {
     console.log("delete");

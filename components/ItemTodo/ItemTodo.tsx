@@ -1,11 +1,13 @@
 import { Button, StyleSheet, Text, View } from "react-native"
 import { ButtonIcon } from "../Buttons/ButtonIcon";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 
 export const ItemTodo = (props: any) => {
   const { data } = props;
+  const navigation = useNavigation();
   const handleEdit = () => {
-    console.log("edit");
+    navigation.navigate("EditTask");
   }
   const handleDelete = () => {
     console.log("delete");

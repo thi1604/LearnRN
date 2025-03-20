@@ -2,12 +2,14 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { CreateTask } from './components/CreateTask/CreateTask';
 import { Home } from './components/Home/Home';
-import { createStaticNavigation, NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
+// import { createStackNavigator } from '@react-navigation/stack';
 // import { createStackNavigator } from '@react-navigation/stack';
 
 export type RootStackParams = {
   Home: undefined;
-  Created: undefined;
+  CreateTask: undefined;
+  EditTask: undefined
 };
 
 

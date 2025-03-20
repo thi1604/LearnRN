@@ -1,4 +1,4 @@
-import { Text } from "@react-navigation/elements";
+// import { Text } from "@react-navigation/elements";
 import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { ButtonHandle } from "../Buttons/ButtonHandle";

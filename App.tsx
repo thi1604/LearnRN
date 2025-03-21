@@ -6,12 +6,19 @@ import { NavigationContainer } from '@react-navigation/native';
 import { EditTask } from './EditTask/EditTask';
 // import { createStackNavigator } from '@react-navigation/stack';
 // import { createStackNavigator } from '@react-navigation/stack';
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack'; 
+
+
+const options : NativeStackNavigationOptions = {
+  headerShown: false
+}
 
 export type RootStackParams = {
   Home: undefined;
   CreateTask: undefined;
   EditTask: {title: string, subTitle: string}
 };
+
 
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -22,9 +29,9 @@ function App(): JSX.Element {
     <>
       <NavigationContainer>
         <RootStack.Navigator initialRouteName='Home'>
-          <RootStack.Screen name='Home' component={Home}/>
-          <RootStack.Screen name='CreateTask' component={CreateTask}/>
-          <RootStack.Screen name='EditTask' component={EditTask}/>
+          <RootStack.Screen name='Home' component={Home} options={options}/>
+          <RootStack.Screen name='CreateTask' component={CreateTask} options={options}/>
+          <RootStack.Screen name='EditTask' component={EditTask} options={options}/>
         </RootStack.Navigator>
       </NavigationContainer>
     </>

@@ -1,4 +1,5 @@
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StyleSheet, Text, TextInput, View } from "react-native"
 import { ButtonHandle } from "../components/Buttons/ButtonHandle"
 
@@ -12,11 +13,12 @@ export type RootStackParams = {
 
 export const EditTask = () => {
   const route = useRoute<RouteProp<RootStackParams, 'EditTask'>>();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const handdleUpdateTask = () => {
     console.log("Update task!")
   }
   const handdleCancelUpdateTask = () => {
-    console.log("Cancel Update!")
+    navigation.navigate("Home");
   }
   return (
     <>

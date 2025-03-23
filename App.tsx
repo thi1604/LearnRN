@@ -4,14 +4,8 @@ import { CreateTask } from './components/CreateTask/CreateTask';
 import { Home } from './components/Home/Home';
 import { NavigationContainer } from '@react-navigation/native';
 import { EditTask } from './EditTask/EditTask';
-// import { createStackNavigator } from '@react-navigation/stack';
-// import { createStackNavigator } from '@react-navigation/stack';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack'; 
-
-
-const options : NativeStackNavigationOptions = {
-  headerShown: false
-}
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 export type RootStackParams = {
   Home: undefined;
@@ -19,20 +13,21 @@ export type RootStackParams = {
   EditTask: {title: string, subTitle: string}
 };
 
-
-
-const RootStack = createNativeStackNavigator<RootStackParams>();
-
+const Drawer = createDrawerNavigator<RootStackParams>()
 
 function App(): JSX.Element {
   return (
     <>
       <NavigationContainer>
-        <RootStack.Navigator initialRouteName='Home'>
-          <RootStack.Screen name='Home' component={Home} options={options}/>
-          <RootStack.Screen name='CreateTask' component={CreateTask} options={options}/>
-          <RootStack.Screen name='EditTask' component={EditTask} options={options}/>
-        </RootStack.Navigator>
+        <Drawer.Navigator initialRouteName='Home'>
+          <Drawer.Screen name='Home' component={Home}/>
+          <Drawer.Screen name='CreateTask' component={CreateTask}/>
+          <Drawer.Screen 
+            name='EditTask' 
+            component={EditTask} 
+            options= {{drawerLabel: () => null}}
+          />
+        </Drawer.Navigator>
       </NavigationContainer>
     </>
   );

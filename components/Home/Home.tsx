@@ -1,45 +1,45 @@
+import axios from "axios"
+import { useEffect, useState } from "react"
 import { ScrollView, StyleSheet, View } from "react-native"
 import { ButtonCreate } from "../Buttons/ButtonCreate"
 import { Footer } from "../Footer/Footer"
-import { Header } from "../Header/header"
 import { ItemTodo } from "../ItemTodo/ItemTodo"
 
+const axiosInstance = axios.create({
+  baseURL: "http://10.0.2.2:3000",
+  headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Origin": "http://localhost:3001"
+  },
+})
 
+//Handle data before response
+axiosInstance.interceptors.response.use(response => {
+  response.data = response.data.listTopicsOS;
+  return response;
+})
 
-export const Home = () => {
-  const dataToDo = [{
-    title: "TODO TITLE1",
-    subTitle: "Todo subTitle1"
-  },
-  {
-    title: "TODO TITLE2",
-    subTitle: "Todo subTitle2"
-  },
-  {
-    title: "TODO TITLE3",
-    subTitle: "Todo subTitle3"
-  },
-  {
-    title: "TODO TITLE4",
-    subTitle: "Todo subTitle4"
-  },
-  {
-    title: "TODO TITLE5",
-    subTitle: "Todo subTitle5"
-  },
-  {
-    title: "TODO TITLE5",
-    subTitle: "Todo subTitle5"
-  },
-  {
-    title: "TODO TITLE5",
-    subTitle: "Todo subTitle5"
-  },
-  {
-    title: "TODO TITLE5",
-    subTitle: "Todo subTitle5"
-  }
-  ]
+export const Home =  () => {
+  let dataToDo : {title: string, avatar: string, description: string}[]= [];
+  const [listData, setListData] = useState<{title: string, avatar: string, description: string}[]>([])
+  useEffect(() => {
+    const getData = async () => {
+      await axiosInstance.get("")
+      .then(function(response) {
+        dataToDo = response.data; // Now, response.data is response.data.listTopicsOS because we use interceptors.response
+        setListData(dataToDo)
+      })
+      .catch(function(error) {
+        if(error.request)
+        console.log(error.request);
+      })
+      .finally(function () {
+        console.log("Added new task successfully!");
+      })
+    }
+    getData();
+  }, [])
   return (
     <>
       {/* <Header/> */}
@@ -47,10 +47,10 @@ export const Home = () => {
           <View style={{position: 'absolute', zIndex: 99, bottom: 162, right: 30}}>
             <ButtonCreate/>
           </View>
-          <ScrollView contentContainerStyle={[{ backgroundColor: '#D6D7EF', paddingBottom: 100}]}> 
+          <ScrollView contentContainerStyle={[{ backgroundColor: '#D6D7EF', paddingBottom: 100}]}>
             <View style={styles.body}>
-              {dataToDo.map((item, index) => (
-                <ItemTodo data={item} key={index} />
+              {listData.map((item, index) => (
+                <ItemTodo data={item} key={index}/>
               ))}
             </View>
           </ScrollView>

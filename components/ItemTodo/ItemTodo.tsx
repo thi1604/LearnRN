@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View } from "react-native"
+import { Button, Image, StyleSheet, Text, View } from "react-native"
 import { ButtonIcon } from "../Buttons/ButtonIcon";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -7,15 +7,22 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 export type RootStackParams = {
   Home: undefined;
   CreateTask: undefined;
-  EditTask: {title: string, subTitle: string}
+  EditTask: {title: string, avatar: string, description: string}
 };
 
+type propsType = {
+  data: {
+    title: string,
+    avatar: string,
+    description: string
+  }
+}
 
-export const ItemTodo = (props: any) => {
-  const { data } = props;
+export const ItemTodo = (props:propsType) => {
+  const data = props.data;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const handleEdit = () => {
-    navigation.navigate("EditTask", data);
+    navigation.navigate("EditTask", props.data);
   }
   const handleDelete = () => {
     console.log("delete");
@@ -30,14 +37,20 @@ export const ItemTodo = (props: any) => {
           <View>
             <Text style={{ fontSize: 13, color: "#9395D3", marginBottom: 5 }}>{data.title}</Text>
           </View>
-          <View>
-            <Text style={{ fontSize: 10, color: "#000000" }}>{data.subTitle}</Text>
+          <View 
+            style= {styles.imageStyle}
+          >
+            <Image 
+              source={{uri: data.avatar}}
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 20
+              }}
+            />
           </View>
         </View>
         <View style={{ display: "flex", flexDirection: 'row', gap: 3 }}>
-          {/* <Button title="Edit" color="#f194ff" onPress={() => {console.log("oke")}}></Button> */}
-          {/* <View>
-        </View> */}
           <ButtonIcon title="edit" onClick={handleEdit} />
           <ButtonIcon title="delete" onClick={handleDelete} />
           <ButtonIcon title="done" onClick={handleDone} />
@@ -51,7 +64,7 @@ const styles = StyleSheet.create({
   itemStyle: {
     backgroundColor: "#FFFFFF",
     width: 400,
-    height: 82,
+    height: 100,
     borderRadius: 15,
     display: 'flex',
     flexDirection: 'row',
@@ -66,5 +79,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "600"
   },
+  imageStyle: {
+    width: 50,
+    height: 50
+  }
 
 })

@@ -7,9 +7,8 @@ import { ButtonHandle } from "../components/Buttons/ButtonHandle"
 export type RootStackParams = {
   Home: undefined;
   CreateTask: undefined;
-  EditTask: {title: string, subTitle: string}
+  EditTask: {title: string, avatar: string, description: string}
 };
-
 
 export const EditTask = () => {
   const route = useRoute<RouteProp<RootStackParams, 'EditTask'>>();
@@ -25,7 +24,7 @@ export const EditTask = () => {
       <View style={styles.container}>
         <View style={styles.body}> 
           <TextInput style={styles.input} placeholder="Title" value={route.params.title}/>
-          <TextInput style={[styles.input]} placeholder="Detail" value={route.params.subTitle}/>
+          <TextInput style={[styles.input]} placeholder="Detail" value={route.params.description}/>
           <View style={styles.Control}>
             <ButtonHandle title="Update" onClick={handdleUpdateTask} style={styles.styleButton}/>
             <ButtonHandle title="Cancel" onClick={handdleCancelUpdateTask} style={styles.styleButton}/>

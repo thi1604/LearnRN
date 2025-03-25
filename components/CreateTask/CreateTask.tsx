@@ -3,21 +3,35 @@ import React, { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { ButtonHandle } from "../Buttons/ButtonHandle";
 import axios from "axios";
-
+import { fetchData } from "../../store/storeCookies";
 
 const axiosInstance = axios.create({
-  baseURL: "http://10.0.2.2:3000",
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json",
-    "Origin": "http://localhost:3001"
   },
 })
 
-axiosInstance.interceptors.request.use(config => {
-  // console.log("Inerceptors before send request");
+axiosInstance.interceptors.request.use(async (config) => {
+  const isLogin = await fetchData('tokenUser');
+  if(isLogin != null){
+    config.headers["Origin"] = "http://localhost:3001"
+    config.baseURL = "http://10.0.2.2:3000";
+  }
   return config;
-})
+  },
+  (error) => {
+    return error;
+  }
+)
+
+axiosInstance.interceptors.response.use(response => {
+    return response.data
+  },
+  (error) => {
+    return Promise.reject('you need login'); //Dung promise.reject
+  }
+)
 
 export const CreateTask = () => {
   const [title, setTitle] = useState('');
@@ -25,15 +39,14 @@ export const CreateTask = () => {
   const handdleAddTask = async () => {
     await axiosInstance.get('/topics/nhac-tre')
     .then(function(response) {
-      console.log(response.data)
+      console.log(response)
     })
     .catch(function(error) {
-      if(error.request)
-      console.log(error.request);
-      
+      console.log(error);
+      return error
     })
     .finally(function () {
-      console.log("Added new task successfully!");
+      // console.log("Added new task successfully!");
     })
   }
   return (

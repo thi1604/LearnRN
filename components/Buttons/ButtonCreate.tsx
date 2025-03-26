@@ -1,19 +1,28 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { CreateTask } from "../CreateTask/CreateTask";
-
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { fetchData } from "../../store/storeCookies";
 
 type RootStackParams = {
   Home: undefined;
   CreateTask: undefined;
-  EditTask: undefined
+  EditTask: undefined;
+  Login: undefined
 };
 
 export const ButtonCreate = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const handleCreateTask = async () => {
+    const isLogin = await fetchData('tokenUser');
+    if(isLogin){
+      navigation.navigate("CreateTask")
+    }
+    else{
+      navigation.navigate("Login")
+    }
+  }
   return (
-      <TouchableOpacity  style={[styles.buttonStyle, styles.textAlign]} onPress={() => navigation.navigate("CreateTask")}>
+      <TouchableOpacity  style={[styles.buttonStyle, styles.textAlign]} onPress={handleCreateTask}>
         <View>
           <Text style={[styles.textStyle]}>+</Text>
         </View>

@@ -7,6 +7,15 @@ import {saveData } from "../../store/storeCookies";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 
+export type RootStackParams = {
+  Home: undefined;
+  CreateTask: undefined;
+  EditTask: {title: string, avatar: string, description: string};
+  Login: undefined;
+  Logout: undefined
+};
+
+
 const axiosInstanceLogin = axios.create({
   baseURL: "http://10.0.2.2:3000",
   headers: {
@@ -15,14 +24,6 @@ const axiosInstanceLogin = axios.create({
     "Origin": "http://localhost:3001"
   },
 });
-
-export type RootStackParams = {
-  Home: undefined;
-  CreateTask: undefined;
-  EditTask: {title: string, avatar: string, description: string};
-  Login: undefined;
-  Logout: undefined
-};
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -62,6 +63,7 @@ export const Login = () => {
             placeholder="Password"
             onChangeText={newSubTitle => setPassword(newSubTitle)}
             value={password}
+            secureTextEntry={true}
             />
           <ButtonHandle title="Login" onClick={handdleLogin} style={styles.styleButton}/>
         </View>

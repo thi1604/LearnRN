@@ -12,13 +12,7 @@ const axiosInstance = axios.create({
     "Accept": "application/json",
     "Origin": "http://localhost:3001"
   },
-})
-
-//Handle data before response
-axiosInstance.interceptors.response.use(response => {
-  response.data = response.data.listTopicsOS;
-  return response;
-})
+});
 
 export const Home =  () => {
   let dataToDo : {title: string, avatar: string, description: string}[]= [];
@@ -27,7 +21,7 @@ export const Home =  () => {
     const getData = async () => {
       await axiosInstance.get("")
       .then(function(response) {
-        dataToDo = response.data; // Now, response.data is response.data.listTopicsOS because we use interceptors.response
+        dataToDo = response.data.listTopicsOS; // Now, response.data is response.data.listTopicsOS because we use interceptors.response
         setListData(dataToDo)
       })
       .catch(function(error) {

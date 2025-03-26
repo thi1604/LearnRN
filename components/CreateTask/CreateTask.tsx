@@ -21,7 +21,7 @@ axiosInstance.interceptors.request.use(async (config) => {
   return config;
   },
   (error) => {
-    return error;
+    return Promise.reject(error);
   }
 )
 
@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(response => {
     return response.data
   },
   (error) => {
-    return Promise.reject('you need login'); //Dung promise.reject
+    return Promise.reject('you need login'); //use promise.reject
   }
 )
 

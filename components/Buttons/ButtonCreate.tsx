@@ -1,6 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { useDispatch, useSelector } from "react-redux";
+import { increment } from "../../features/counter";
+import { RootState } from "../../store";
 import { fetchData } from "../../store/storeCookies";
 
 type RootStackParams = {
@@ -12,14 +15,18 @@ type RootStackParams = {
 
 export const ButtonCreate = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  // const getValue = useSelector((state: RootState) => state.counter.value)
+  // const dispatch = useDispatch();
   const handleCreateTask = async () => {
-    const isLogin = await fetchData('tokenUser');
-    if(isLogin){
+    const token = await fetchData('tokenUser');
+    console.log(token);
+    if(token){
       navigation.navigate("CreateTask")
     }
     else{
       navigation.navigate("Login")
     }
+    // dispatch(increment())
   }
   return (
       <TouchableOpacity  style={[styles.buttonStyle, styles.textAlign]} onPress={handleCreateTask}>

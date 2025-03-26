@@ -4,6 +4,10 @@ import { StyleSheet, TextInput, View } from "react-native";
 import { ButtonHandle } from "../Buttons/ButtonHandle";
 import axios from "axios";
 import { fetchData } from "../../store/storeCookies";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const axiosInstance = axios.create({
   headers: {
@@ -33,21 +37,36 @@ axiosInstance.interceptors.response.use(response => {
   }
 )
 
+export type RootStackParams = {
+  Home: undefined;
+  CreateTask: undefined;
+  EditTask: {title: string, avatar: string, description: string};
+  Login: undefined;
+  Logout: undefined
+};
+
 export const CreateTask = () => {
   const [title, setTitle] = useState('');
   const [subTitle, setsubTitle] = useState('');
+  const isLogin = useSelector((state: RootState) => state.checkLogin.value);
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const handdleAddTask = async () => {
-    await axiosInstance.get('/topics/nhac-tre')
-    .then(function(response) {
-      console.log(response)
-    })
-    .catch(function(error) {
-      console.log(error);
-      return error
-    })
-    .finally(function () {
-      // console.log("Added new task successfully!");
-    })
+    if(isLogin){
+      await axiosInstance.get('/topics/nhac-tre')
+      .then(function(response) {
+        console.log(response)
+      })
+      .catch(function(error) {
+        console.log(error);
+        return error
+      })
+      .finally(function () {
+        // console.log("Added new task successfully!");
+      })
+    }
+    else{
+      navigation.navigate("Login");
+    }
   }
   return (
     <>

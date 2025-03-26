@@ -1,6 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Button, StyleSheet} from "react-native"
+import { useDispatch } from "react-redux";
+import { isLogout } from "../../features/checkLogin";
+import { AppDispatch } from "../../store";
 import { deleteData, fetchData } from "../../store/storeCookies";
 import { ButtonHandle } from "../Buttons/ButtonHandle"
 
@@ -13,10 +16,12 @@ export type RootStackParams = {
 };
 
 export const Logout = ()=> {
+  const dispatch = useDispatch<AppDispatch>();
   const handleLogout = async () => {
-    const isLogin = await fetchData('tokenUser');
-    if(isLogin != null){
+    const token = await fetchData('tokenUser');
+    if(token != null){
       await deleteData("tokenUser")
+      dispatch(isLogout()) //Set global isLogout variable is false
     }
   }
   handleLogout();

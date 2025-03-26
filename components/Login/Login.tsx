@@ -6,6 +6,9 @@ import axios from "axios";
 import {saveData } from "../../store/storeCookies";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store";
+import { isLogin } from "../../features/checkLogin";
 
 export type RootStackParams = {
   Home: undefined;
@@ -26,6 +29,7 @@ const axiosInstanceLogin = axios.create({
 });
 
 export const Login = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
@@ -37,6 +41,7 @@ export const Login = () => {
     .then(response => {
       const getToken = async () => {
         if(response.data.code == 200){
+          dispatch(isLogin()) //Set global isLogin value is true;
           await saveData("tokenUser", response.data.token);
           // console.log(await fetchData("tokenUser"));
           navigation.navigate("Home");

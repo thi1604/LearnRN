@@ -54,7 +54,7 @@ export const CreateTask = () => {
     if(isLogin){
       await axiosInstance.get('/topics/nhac-tre')
       .then(function(response) {
-        console.log(response)
+        console.log("Add new task successfully")
       })
       .catch(function(error) {
         console.log(error);
@@ -90,7 +90,6 @@ export const CreateTask = () => {
     </>
   )
 }
-
 
 const styles = StyleSheet.create({
   container: {

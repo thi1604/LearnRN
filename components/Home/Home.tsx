@@ -1,6 +1,9 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { ScrollView, StyleSheet, View } from "react-native"
+import { useDispatch, useSelector } from "react-redux"
+import { reInit } from "../../features/listItem"
+import { AppDispatch, RootState } from "../../store"
 import { ButtonCreate } from "../Buttons/ButtonCreate"
 import { Footer } from "../Footer/Footer"
 import { ItemTodo } from "../ItemTodo/ItemTodo"
@@ -15,14 +18,17 @@ const axiosInstance = axios.create({
 });
 
 export const Home =  () => {
-  let dataToDo : {title: string, avatar: string, description: string}[]= [];
-  const [listData, setListData] = useState<{title: string, avatar: string, description: string}[]>([])
+  let dataToDo : {id: string, title: string, avatar: string, description: string}[]= [];
+  // const [listData, setListData] = useState<{title: string, avatar: string, description: string}[]>([])
+  const dispatch = useDispatch<AppDispatch>();
+  const dataFinal = useSelector((state: RootState) => state.itemArray);
   useEffect(() => {
     const getData = async () => {
       await axiosInstance.get("")
       .then(function(response) {
         dataToDo = response.data.listTopicsOS; // Now, response.data is response.data.listTopicsOS because we use interceptors.response
-        setListData(dataToDo)
+        dispatch(reInit({dataAfterCallAPI: dataToDo}));
+        // setListData(dataToDo)
       })
       .catch(function(error) {
         if(error.request)
@@ -43,7 +49,7 @@ export const Home =  () => {
           </View>
           <ScrollView contentContainerStyle={[{ backgroundColor: '#D6D7EF', paddingBottom: 100}]}>
             <View style={styles.body}>
-              {listData.map((item, index) => (
+              {dataFinal.map((item, index) => (
                 <ItemTodo data={item} key={index}/>
               ))}
             </View>

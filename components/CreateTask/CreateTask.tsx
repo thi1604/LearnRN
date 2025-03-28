@@ -4,10 +4,11 @@ import { StyleSheet, TextInput, View } from "react-native";
 import { ButtonHandle } from "../Buttons/ButtonHandle";
 import axios from "axios";
 import { fetchData } from "../../store/storeCookies";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { addItem } from "../../features/listItem";
 
 const axiosInstance = axios.create({
   headers: {
@@ -46,6 +47,8 @@ export type RootStackParams = {
 };
 
 export const CreateTask = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const listItem = useSelector((state: RootState) => state.itemArray);
   const [title, setTitle] = useState('');
   const [subTitle, setsubTitle] = useState('');
   const isLogin = useSelector((state: RootState) => state.checkLogin.value);
@@ -54,7 +57,17 @@ export const CreateTask = () => {
     if(isLogin){
       await axiosInstance.get('/topics/nhac-tre')
       .then(function(response) {
-        console.log("Add new task successfully")
+        const newData= {
+          _id: `${listItem.length + 1}`,
+          title: title,
+          description: subTitle,
+          avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjiuAXvOnVPmYckFE_5Nkyd1ecgK5AmKxP7A&s',
+          isDone: false,
+          deleted: false
+        }
+        dispatch(addItem(newData))
+        console.log("Add a new task successfully");
+        navigation.navigate("Home");
       })
       .catch(function(error) {
         console.log(error);

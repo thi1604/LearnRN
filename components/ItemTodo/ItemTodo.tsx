@@ -3,6 +3,10 @@ import { ButtonIcon } from "../Buttons/ButtonIcon";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useDispatch } from "react-redux";
+import { AppDispatch} from "../../store";
+import { backItem, finishedItem, removeItem } from "../../features/listItem";
+
 
 export type RootStackParams = {
   Home: undefined;
@@ -12,23 +16,30 @@ export type RootStackParams = {
 
 type propsType = {
   data: {
+    _id: string,
     title: string,
     avatar: string,
-    description: string
+    description: string,
+    deleted: boolean,
+    isDone : boolean
   }
 }
 
 export const ItemTodo = (props:propsType) => {
   const data = props.data;
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const dispatch = useDispatch<AppDispatch>();
   const handleEdit = () => {
     navigation.navigate("EditTask", props.data);
   }
   const handleDelete = () => {
-    console.log("delete");
+    dispatch(removeItem(data._id));
   }
   const handleDone = () => {
-    console.log("done");
+    dispatch(finishedItem(data._id));
+  }
+  const handleBack = () => {
+    dispatch(backItem(data._id));
   }
   return (
     <>
@@ -50,12 +61,19 @@ export const ItemTodo = (props:propsType) => {
             />
           </View>
         </View>
-        <View style={{ display: "flex", flexDirection: 'row', gap: 3 }}>
-          <ButtonIcon title="edit" onClick={handleEdit} />
-          <ButtonIcon title="delete" onClick={handleDelete} />
-          <ButtonIcon title="done" onClick={handleDone} />
+          {data.isDone == false ? 
+            <View style={{ display: "flex", flexDirection: 'row', gap: 3 }}>
+              <ButtonIcon title="edit" onClick={handleEdit} />
+              <ButtonIcon title="delete" onClick={handleDelete} />
+              <ButtonIcon title="done" onClick={handleDone} />
+            </View>
+            :
+            <View style={{ display: "flex", flexDirection: 'row', gap: 3 }}>
+              <ButtonIcon title="Finished" onClick={handleDelete} />
+              <ButtonIcon title="Back" onClick={handleBack} />
+            </View>
+          }
         </View>
-      </View>
     </>
   )
 }

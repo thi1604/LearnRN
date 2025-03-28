@@ -11,7 +11,7 @@ import { Logout } from "../Logout/Logout";
 export type RootStackParams = {
   Home: undefined;
   CreateTask: undefined;
-  EditTask: {title: string, subTitle: string},
+  EditTask: {title: string, des: string, avatar:string, id: string},
   Login: undefined,
   Logout: undefined
 };
@@ -23,25 +23,22 @@ export const MyApp = () => {
   return (
     <>
       <NavigationContainer>
-        <Drawer.Navigator initialRouteName='Home'>
-          <Drawer.Screen name='Home' component={Home}/>
-          <Drawer.Screen name='CreateTask' component={CreateTask}/>
-          <Drawer.Screen 
-            name='Login' 
-            component={Login}
-            options = {!isLogin? {} : {drawerLabel: () => null}} 
-            // options = {{drawerLabel: () => true}}
-          />
-          <Drawer.Screen 
-            name='Logout' 
-            component={Logout}
-            options = {isLogin? {}: {drawerLabel: () => null}} 
-          />
-          <Drawer.Screen 
-            name='EditTask' 
-            component={EditTask} 
-            options= {{drawerLabel: () => null}}
-          />
+        <Drawer.Navigator initialRouteName='Login'>
+          {isLogin == true && (
+            <Drawer.Screen name='Home' component={Home}/>
+          )}
+          {isLogin == true && (
+            <Drawer.Screen name='CreateTask' component={CreateTask}/>
+          )}
+          {isLogin == false && (
+            <Drawer.Screen name='Login' component={Login}/>
+          )}
+          {isLogin == true && (
+            <Drawer.Screen name='Logout' component={Logout}/>
+          )}
+          {isLogin == true && (
+            <Drawer.Screen name='EditTask' component={EditTask}/>
+          )}
         </Drawer.Navigator>
       </NavigationContainer>
     </>

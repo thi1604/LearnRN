@@ -1,7 +1,8 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { ScrollView, StyleSheet, View } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
+import { isLogin } from "../../features/checkLogin"
 import { reInit } from "../../features/listItem"
 import { AppDispatch, RootState } from "../../store"
 import { ButtonCreate } from "../Buttons/ButtonCreate"
@@ -18,17 +19,19 @@ const axiosInstance = axios.create({
 });
 
 export const Home =  () => {
-  let dataToDo : {id: string, title: string, avatar: string, description: string}[]= [];
+  let dataToDo : {_id: string, title: string, avatar: string, description: string, deleted: boolean, isDone: boolean}[]= [];
   // const [listData, setListData] = useState<{title: string, avatar: string, description: string}[]>([])
   const dispatch = useDispatch<AppDispatch>();
   const dataFinal = useSelector((state: RootState) => state.itemArray);
+  const isLogin = useSelector((state: RootState) => state.checkLogin);
+  const filter = useSelector((state: RootState) => state.filter);
   useEffect(() => {
     const getData = async () => {
       await axiosInstance.get("")
       .then(function(response) {
         dataToDo = response.data.listTopicsOS; // Now, response.data is response.data.listTopicsOS because we use interceptors.response
-        dispatch(reInit({dataAfterCallAPI: dataToDo}));
-        // setListData(dataToDo)
+        const dataFinal = dataToDo.map(item => {return {...item, isDone: false}})
+        dispatch(reInit({dataAfterCallAPI: dataFinal}));
       })
       .catch(function(error) {
         if(error.request)
@@ -43,19 +46,27 @@ export const Home =  () => {
   return (
     <>
       {/* <Header/> */}
-        <View style={[styles.container]}>
-          <View style={{position: 'absolute', zIndex: 99, bottom: 162, right: 30}}>
-            <ButtonCreate/>
-          </View>
-          <ScrollView contentContainerStyle={[{ backgroundColor: '#D6D7EF', paddingBottom: 100}]}>
-            <View style={styles.body}>
-              {dataFinal.map((item, index) => (
-                <ItemTodo data={item} key={index}/>
-              ))}
+        {isLogin.value == true && 
+          <View style={[styles.container]}>
+            <View style={{position: 'absolute', zIndex: 99, bottom: 162, right: 30}}>
+              <ButtonCreate/>
             </View>
-          </ScrollView>
-          <Footer/> 
-        </View>
+            <ScrollView contentContainerStyle={[{ backgroundColor: '#D6D7EF', paddingBottom: 100}]}>
+              <View style={styles.body}>
+                {dataFinal.map((item, index) => { 
+                  if(item.deleted == false ){
+                    if(filter.value == "Compiled" && item.isDone == true)
+                      return <ItemTodo data={item} key={index}/>
+                    else if (filter.value == "ALL")
+                      return <ItemTodo data={item} key={index}/>
+                  }
+                  }
+                )}
+              </View>
+            </ScrollView>
+            <Footer/> 
+          </View>
+      }
     </>
   )
 }

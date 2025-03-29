@@ -19,7 +19,7 @@ export const ButtonCreate = () => {
   // const dispatch = useDispatch();
   const handleCreateTask = async () => {
     const token = await fetchData('tokenUser');
-    console.log(token);
+    // console.log(token);
     if(token){
       navigation.navigate("CreateTask")
     }

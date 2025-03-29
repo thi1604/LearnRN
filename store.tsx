@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./features/counter";
+// import counterReducer from "./features/counter";
 import checkLoginReducer from "./features/checkLogin";
 import listItemReducer from "./features/listItem";
 import fillter from "./features/fillter";
@@ -7,7 +7,7 @@ import fillter from "./features/fillter";
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    // counter: counterReducer,
     checkLogin: checkLoginReducer,
     itemArray: listItemReducer,
     filter: fillter
